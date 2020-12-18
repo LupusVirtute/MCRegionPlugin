@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2020 Korwin at https://github.com/PuccyDestroyerxXx
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package com.lupus.runnables;
+
+import com.lupus.region.Region;
+import com.lupus.utils.Particles;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+/**
+ *
+ * @author Korwin at https://github.com/PuccyDestroyerxXx
+ */
+public class BorderRunnable extends BukkitRunnable {
+	World warudo;
+	Region x;
+	Player p;
+	int runTimes;
+	public BorderRunnable(World warudo,Region x,Player p,int timesRunning){
+		this.warudo = warudo;
+		this.x = x;
+		this.p = p;
+		this.runTimes = timesRunning;
+	}
+
+	@Override
+	public void run() {
+		if(runTimes <= 0){
+			this.cancel();
+			return;
+		}
+		else{
+			runTimes--;
+		}
+		if(!p.isOnline()){
+			this.cancel();
+			return;
+		}
+		Particles.visualizeRectangularBorderForPlayer(warudo, x.getMaxX(), x.getMaxZ(), x.getMinX(), x.getMinZ(), p,x.getParticleColor());
+	}
+}
