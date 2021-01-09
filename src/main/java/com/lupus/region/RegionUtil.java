@@ -23,8 +23,7 @@ public class RegionUtil {
 		{
 			return false;
 		}
-		for (int i = 0; i < RegionManager.getRegionAmount(); i++) {
-			Region r = RegionManager.findRegion(i);
+		for (Region r : RegionManager.getRegions()) {
 			if (r == null) {
 				continue;
 			}

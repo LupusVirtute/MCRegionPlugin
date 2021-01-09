@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  * @author Korwin at https://github.com/PuccyDestroyerxXx
  */
 public class RegionManager {
-	private static final List<Region> regions = new ArrayList<>();
+	private static final Set<Region> regions = new HashSet<>();
 	private static final HashMap<UUID, HashSet<UUID>> playersInRegion = new HashMap<>();
 	public static void clear(){
 		playersInRegion.clear();
@@ -66,6 +66,7 @@ public class RegionManager {
 		region.addMember(player);
 		return true;
 	}
+
 	public static boolean removePlayerFromRegion(UUID player,Region region){
 		if(!playersInRegion.containsKey(player)){
 			return false;
@@ -207,19 +208,31 @@ public class RegionManager {
 	public static int getRegionAmount(){
 		return regions.size();
 	}
+
+	/**
+	 *
+	 * @deprecated
+	 * @param id
+	 * @return
+	 */
 	public static Region findRegion(int id){
 		if(id < 0 || id > regions.size()){
 			return null;
 		}
-		return regions.get(id);
+		for (Region r : regions) {
+			if (r.getId() == id) {
+				return r;
+			}
+		}
+		return null;
 	}
 	public static List<String> findRegionsBeginningWith(String search){
 		List<String> results = new ArrayList<>();
 		String name;
-		for (int i=0;i<regions.size();i++) {
-			name = regions.get(i).getName();
+		for (Region reg : RegionManager.getRegions()) {
+			name = ColorUtil.strip(reg.getName());
 			if (name.startsWith(search)) {
-				results.add(ColorUtil.strip(name));
+				results.add(name);
 			}
 		}
 		return results;
@@ -227,8 +240,8 @@ public class RegionManager {
 	public static List<String> findRegionsContaining(String search){
 		List<String> results = new ArrayList<>();
 		String name;
-		for (int i=0;i<regions.size();i++) {
-			name = regions.get(i).getName();
+		for (Region reg : RegionManager.getRegions()) {
+			name = ColorUtil.strip(reg.getName());
 			if (name.contains(search)) {
 				results.add(name);
 			}
@@ -249,8 +262,7 @@ public class RegionManager {
 		if(region == null){
 			return null;
 		}
-		for(int i=0;i<regions.size();i++){
-			Region reg =regions.get(i);
+		for(Region reg : RegionManager.getRegions()){
 			if(reg.getUniqueId().equals(region)){
 				return reg;
 			}
@@ -263,13 +275,15 @@ public class RegionManager {
 		}
 		region = ColorUtil.strip(region);
 		region = region.toLowerCase();
-		for(int i=0;i<regions.size();i++){
-			Region reg = regions.get(i);
+		for(Region reg : RegionManager.getRegions()){
 			if(ColorUtil.strip(reg.getName().toLowerCase()).equals(region)){
 				return reg;
 			}
 		}
 		return null;
+	}
+	public static Set<Region> getRegions(){
+		return regions;
 	}
 	public static boolean addRegion(Region region){
 		if(region != null){

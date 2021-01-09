@@ -10,6 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RegionCheckRunnable extends BukkitRunnable {
 	@Override
 	public void run() {
@@ -21,8 +24,7 @@ public class RegionCheckRunnable extends BukkitRunnable {
 				continue;
 			boolean contains = false;
 			Location loc = p.getLocation();
-			for (int i = 0; i< RegionManager.getRegionAmount(); i++) {
-				Region region = RegionManager.findRegion(i);
+			for (Region region : RegionManager.getRegions()) {
 				if(region == null){
 					continue;
 				}

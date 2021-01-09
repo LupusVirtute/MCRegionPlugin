@@ -25,7 +25,7 @@ public class GoToCommand extends PlayerCommand {
 	@NotNull
 	@Override
 	public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-		if (args.length == 1) {
+		if (args.length >= 1) {
 			String lastWord = args[args.length - 1];
 			return RegionManager.findRegionsBeginningWith(lastWord);
 		}

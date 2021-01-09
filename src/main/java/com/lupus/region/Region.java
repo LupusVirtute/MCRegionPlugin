@@ -31,6 +31,8 @@ import java.util.*;
  * @author Korwin at https://github.com/PuccyDestroyerxXx
  */
 public class Region implements ConfigurationSerializable {
+	private static int lastId = 0;
+	private int id;
 	private final World world;
 	private String name;
 	private Location spawn;
@@ -107,6 +109,8 @@ public class Region implements ConfigurationSerializable {
 			level = (int)serialized.get("level");
 		}
 		calculateCenter();
+		id = lastId;
+		lastId++;
 	}
 	public Region(World world,String name,Location spawn,int level,UUID ownerUUID){
 		this.world = world;
@@ -130,11 +134,15 @@ public class Region implements ConfigurationSerializable {
 		members = new HashSet<>();
 		members.add(ownerUUID);
 		Player p = Bukkit.getPlayer(ownerUUID);
+		id = lastId;
+		lastId++;
 	}
+
 	private void calculateCenter(){
 		centerX = (minX + maxX)/2;
 		centerZ = (minZ + maxZ)/2;
 	}
+
 	public int getMinZ(){
 		return minZ;
 	}
@@ -147,12 +155,18 @@ public class Region implements ConfigurationSerializable {
 	public int getMaxX(){
 		return maxX;
 	}
+
+
+
 	public ItemStack getIcon(){
 		return icon;
 	}
 	public Color getParticleColor(){
 		return particleColor;
 	}
+
+
+
 	public void setParticleColor(Color color){
 		particleColor = color;
 	}
@@ -163,6 +177,9 @@ public class Region implements ConfigurationSerializable {
 		if (color == null)
 			return;
 		plotColor = color;
+	}
+	public int getId(){
+		return id;
 	}
 	public void setIcon(ItemStack item){
 		if (item == null || item.getType() == Material.AIR)
@@ -185,6 +202,11 @@ public class Region implements ConfigurationSerializable {
 		UUID playerUUID = p.getUniqueId();
 		return members.contains(playerUUID) ? playerUUID : null;
 	}
+
+	public boolean containsMember(Player p) {
+		return members.contains(p.getUniqueId());
+	}
+
 	public UUID getUniqueId(){
 		return uniqueID;
 	}
