@@ -28,6 +28,6 @@ public class SetSpawnCMD extends PlayerCommand {
 		}
 		Location playerLoc = executor.getLocation();
 		r.setSpawn(playerLoc);
-		executor.sendMessage(GeneralMessages.CHANGED_SPAWN_SUCCESFULLY.toString());
+		executor.sendMessage(GeneralMessages.CHANGED_SPAWN_SUCCESSFULLY.toString());
 	}
 }

@@ -28,11 +28,11 @@ public class CreatePlotCMD extends PlayerCommand {
 		String name = args.get(0);
 		Region r = RegionManager.getRegionOfOwner(executor);
 		if(r != null){
-			executor.sendMessage(GeneralMessages.ALERADY_OWNS_PLOT.toString());
+			executor.sendMessage(GeneralMessages.ALREADY_OWNS_PLOT.toString());
 			return;
 		}
 		if(RegionManager.doesRegionNameAlreadyExist(name)){
-			executor.sendMessage(GeneralMessages.PLOT_ALERADY_EXISTS.toString());
+			executor.sendMessage(GeneralMessages.PLOT_ALREADY_EXISTS.toString());
 			return;
 		}
 		Location playerLoc = executor.getLocation();
@@ -47,6 +47,6 @@ public class CreatePlotCMD extends PlayerCommand {
 		RegionManager.addPlayerToRegion(executor,r);
 
 		MessageReplaceQuery query = new MessageReplaceQuery().addString("name",r.getName());
-		executor.sendMessage(GeneralMessages.SUCCESFUL_CREATION.toString(query));
+		executor.sendMessage(GeneralMessages.SUCCESSFUL_CREATION.toString(query));
 	}
 }

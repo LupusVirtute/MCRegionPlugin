@@ -1,6 +1,5 @@
 package com.lupus.commands.sub;
 
-import com.lupus.managers.CacheManager;
 import com.lupus.managers.InviteManager;
 import com.lupus.managers.RegionManager;
 import com.lupus.messages.GeneralMessages;
@@ -8,7 +7,6 @@ import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.PlayerCommand;
 import com.lupus.command.framework.commands.arguments.ArgumentList;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class AddToPlotCMD extends PlayerCommand {
@@ -40,6 +38,6 @@ public class AddToPlotCMD extends PlayerCommand {
 		}
 		InviteManager.addInvite(p2,r);
 		MessageReplaceQuery query = new MessageReplaceQuery().addString("player",p2.getName());
-		executor.sendMessage(GeneralMessages.INVITE_SUCCESFUL.toString(query));
+		executor.sendMessage(GeneralMessages.INVITE_SUCCESSFUL.toString(query));
 	}
 }

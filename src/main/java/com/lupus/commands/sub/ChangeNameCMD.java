@@ -26,7 +26,7 @@ public class ChangeNameCMD extends PlayerCommand {
 		}
 
 		if(RegionManager.doesRegionNameAlreadyExist(args.get(0))){
-			executor.sendMessage(GeneralMessages.PLOT_ALERADY_EXISTS.toString());
+			executor.sendMessage(GeneralMessages.PLOT_ALREADY_EXISTS.toString());
 			return;
 		}
 		r.changeName(args.get(0));

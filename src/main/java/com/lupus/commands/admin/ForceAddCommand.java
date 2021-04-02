@@ -1,13 +1,11 @@
 package com.lupus.commands.admin;
 
-import com.lupus.managers.CacheManager;
 import com.lupus.managers.RegionManager;
 import com.lupus.messages.GeneralMessages;
 import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.LupusCommand;
 import com.lupus.command.framework.commands.arguments.ArgumentList;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +35,7 @@ public class ForceAddCommand extends LupusCommand {
 		MessageReplaceQuery query = new MessageReplaceQuery().
 				addString("player",p.getName()).
 				addString("name",r.getName());
-		executor.sendMessage(GeneralMessages.SUCCESFULL_FORCE_ADD.toString(query));
+		executor.sendMessage(GeneralMessages.SUCCESSFUL_FORCE_ADD.toString(query));
 	}
 	@NotNull
 	@Override
