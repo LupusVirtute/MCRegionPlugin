@@ -1,7 +1,7 @@
 package com.lupus.messages;
 
 import com.lupus.economy.Prices;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import org.bukkit.ChatColor;
 
 import java.util.Arrays;
@@ -16,9 +16,9 @@ public class PlotStrings {
 					"&9/dzialka teleport [nazwa dzialki]",
 					"&9/dzialka ulepsz",
 					"&9/dzialka stats [dzialka]",
-					ChatColor.DARK_AQUA + "/dzialka granica",
+					"&3/dzialka granica",
 					"&9/dzialka usun",
-					ChatColor.DARK_AQUA + "/dzialka nazwa [nowa nazwa]",
+					"&3/dzialka nazwa [nowa nazwa]",
 			};
 	public static String[][] lores =
 			{
@@ -29,7 +29,7 @@ public class PlotStrings {
 					{"&eOglądasz statystyki działki", ChatColor.DARK_RED + "wpisz nazwe działki żeby podglądać innych!"},
 					{ChatColor.DARK_GREEN + "Pokazuje granice działki","w formie granicy", ChatColor.DARK_GREEN + "Stworzonej z niebieskich cząsteczek!!"},
 					{"&4Usuwasz działke musisz", ChatColor.DARK_RED + "użyć podwójnie komendy by zadziałała"},
-					{ColorUtil.text2Color("&eMożesz zmienić"),ColorUtil.text2Color("&cnazwe działki na inną!")},
+					{TextUtility.color("&eMożesz zmienić"),TextUtility.color("&cnazwe działki na inną!")},
 			};
 	public static String createPlotDisplayName = ChatColor.translateAlternateColorCodes('&', "&9/dzialka stworz [nazwa]");
 	@SuppressWarnings("ArraysAsListWithZeroOrOneArgument")

@@ -1,11 +1,12 @@
 package com.lupus.commands.admin;
 
 
+import com.lupus.command.framework.commands.arguments.ArgumentList;
+import com.lupus.managers.CacheManager;
 import com.lupus.managers.RegionManager;
+import com.lupus.messages.GeneralMessages;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.LupusCommand;
-import com.lupus.messages.PlotMessages;
-import com.lupus.utils.Usage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -17,20 +18,22 @@ import java.util.List;
 public class ChangeOwnerCommand extends LupusCommand {
 	public ChangeOwnerCommand(){
 		super("changeowner",
-				Usage.usage("/plots changeowner","[Gracz] [Dzialka]"),
+				usage("/plots changeowner","[Gracz] [Dzialka]"),
 				"&6Zmienia właściciela działki",
 				2);
 	}
 	@Override
-	public void run(CommandSender executor, String[] args) {
-		Player p2 = Bukkit.getPlayer(args[0]);
+	public void run(CommandSender executor, ArgumentList args) throws Exception {
+		Player p2 = Bukkit.getPlayer(
+				CacheManager.getInstance().getPlayer(args.get(0))
+		);
 		if (p2 == null) {
-			executor.sendMessage(PlotMessages.PLAYER_OFFLINE.toString());
+			executor.sendMessage(GeneralMessages.PLAYER_OFFLINE.toString());
 			return;
 		}
-		Region r = RegionManager.findRegion(args[1]);
+		Region r = args.getArg(Region.class,1);
 		if(r == null){
-			executor.sendMessage(PlotMessages.NULL_PLOT.toString());
+			executor.sendMessage(GeneralMessages.NULL_PLOT.toString());
 			return;
 		}
 		Region ownerRegion = RegionManager.getRegionOfOwner(p2);
@@ -43,9 +46,9 @@ public class ChangeOwnerCommand extends LupusCommand {
 		}
 		boolean b = r.changeOwner(p2);
 		if(b)
-			executor.sendMessage(ChatColor.BLUE+ "Udało się zmienić właściciela brawo komunizmowi");
+			executor.sendMessage(GeneralMessages.CHANGED_PLOT_OWNER.toString());
 		else
-			executor.sendMessage(ChatColor.RED+ "Coś się kurwa popsuło nie było mnie słychać zjebało mnie przy zmianie właściciela");
+			executor.sendMessage(GeneralMessages.FATAL_CRASH_XD.toString());
 		return;
 	}
 	@NotNull

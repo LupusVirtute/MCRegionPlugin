@@ -2,10 +2,10 @@ package com.lupus.gui.manager.sub.gui;
 
 import com.lupus.gui.GUI;
 import com.lupus.gui.PlotManagerGUI;
+import com.lupus.gui.utils.ItemUtility;
 import com.lupus.region.Region;
+import com.lupus.gui.utils.TextUtility;
 import com.lupus.utils.ChatColorToWool;
-import com.lupus.utils.ColorUtil;
-import com.lupus.utils.ItemStackUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,13 +26,11 @@ public class PlayerNameColorPlotGUI extends GUI {
 		for (int i = 0; i < 16; i++) {
 			ChatColor value = colours[i];
 			inv.setItem(i,
-				ItemStackUtil.setItemTitleAndLore(
+				ItemUtility.setItemTitleAndLore(
 					ChatColorToWool.cctw.getItemFromChatColor(value),
 					value + "Kolor",
-					new String[]{
-						"&6Wejście na działke będzie wyglądało tak:",
-						"&9Wchodzisz na działke: "+value+ ColorUtil.strip(r.getName())
-					}
+						Arrays.asList("&6Wejście na działke będzie wyglądało tak:",
+								"&9Wchodzisz na działke: " + value + TextUtility.strip(r.getName()))
 			));
 		}
 		ItemStack deny = new ItemStack(Material.RED_STAINED_GLASS_PANE);
@@ -50,10 +48,10 @@ public class PlayerNameColorPlotGUI extends GUI {
 	public void updateInfoMeta(){
 		ItemStack stack = inv.getItem(23);
 		ItemMeta meta = stack.getItemMeta();
-		meta.setLore(Arrays.asList(ColorUtil.text2Color(
+		meta.setLore(Arrays.asList(TextUtility.color(
 				new String[]{
 						"&6&lWejście na działke będzie wyglądało tak:",
-						"&9Wchodzisz na działke: "+selected+ ColorUtil.strip(plot.getName())
+						"&9Wchodzisz na działke: "+selected+ TextUtility.strip(plot.getName())
 				}
 		)));
 	}

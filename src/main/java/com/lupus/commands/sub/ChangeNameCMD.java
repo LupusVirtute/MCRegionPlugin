@@ -2,33 +2,34 @@ package com.lupus.commands.sub;
 
 
 import com.lupus.managers.RegionManager;
+import com.lupus.messages.GeneralMessages;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.PlayerCommand;
-import com.lupus.utils.ColorUtil;
-import com.lupus.utils.Usage;
-import com.lupus.messages.PlotMessages;
+import com.lupus.gui.utils.TextUtility;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.bukkit.entity.Player;
 
 public class ChangeNameCMD extends PlayerCommand {
 	public ChangeNameCMD(){
-		super("nazwa", Usage.usage("/dzialka nazwa","[nowa nazwa]"),"&6Zmieniasz nazwe swojej działki",1);
+		super("nazwa", usage("/dzialka nazwa","[nowa nazwa]"),"&6Zmieniasz nazwe swojej działki",1);
 	}
 	@Override
-	public void run(Player executor, String[] args) {
-		if(args.length < 1){
+	public void run(Player executor, ArgumentList args) {
+		if(args.size() < 1){
 			executor.sendMessage(usage());
 			return;
 		}
 		Region r = RegionManager.getRegionOfOwner(executor);
 		if(r == null){
-			executor.sendMessage(ColorUtil.text2Color("&cNie posiadasz działki"));
+			executor.sendMessage(TextUtility.color("&cNie posiadasz działki"));
 			return;
 		}
-		if(RegionManager.doesRegionNameAlreadyExist(args[0])){
-			executor.sendMessage(PlotMessages.PLOT_ALERADY_EXISTS.toString());
+
+		if(RegionManager.doesRegionNameAlreadyExist(args.get(0))){
+			executor.sendMessage(GeneralMessages.PLOT_ALERADY_EXISTS.toString());
 			return;
 		}
-		r.changeName(args[0]);
-		executor.sendMessage(ColorUtil.text2Color("&a&lPoprawnie zmieniono nazwe działki na : " + args[0]));
+		r.changeName(args.get(0));
+		executor.sendMessage(TextUtility.color("&a&lPoprawnie zmieniono nazwe działki na : " + args.get(0)));
 	}
 }

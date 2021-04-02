@@ -1,12 +1,12 @@
 package com.lupus.commands.admin;
 
 import com.lupus.command.framework.commands.LupusCommand;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
+import com.lupus.managers.CacheManager;
 import com.lupus.managers.RegionManager;
 import com.lupus.messages.GeneralMessages;
-import com.lupus.messages.PlotMessages;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,15 +18,11 @@ public class PlayerInfoCMD extends LupusCommand {
 	}
 
 	@Override
-	public void run(CommandSender commandSender, String[] strings) {
-		Player p = Bukkit.getPlayerExact(strings[0]);
-		if (p == null) {
-			commandSender.sendMessage(PlotMessages.PLAYER_OFFLINE.toString());
-			return;
-		}
-		commandSender.sendMessage(ColorUtil.text2Color("&e ---- "+p.getName()+"&e ----"));
-		commandSender.sendMessage(ColorUtil.text2Color("&bOwner of: " + RegionManager.getRegionOfOwner(p).getName()));
-		commandSender.sendMessage(ColorUtil.text2Color("&bMemberships: "));
+	public void run(CommandSender commandSender, ArgumentList args) throws Exception {
+		Player p = args.getArg(Player.class,0);
+		commandSender.sendMessage(TextUtility.color("&e ---- "+p.getName()+"&e ----"));
+		commandSender.sendMessage(TextUtility.color("&bOwner of: " + RegionManager.getRegionOfOwner(p).getName()));
+		commandSender.sendMessage(TextUtility.color("&bMemberships: "));
 		for (UUID playerMembership : RegionManager.getPlayerMemberships(p)) {
 			commandSender.sendMessage(
 			"\t -"+	RegionManager.findRegion(playerMembership).getName()

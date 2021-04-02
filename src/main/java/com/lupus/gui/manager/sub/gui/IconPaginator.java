@@ -4,7 +4,7 @@ import com.lupus.gui.Paginator;
 import com.lupus.gui.PlotManagerGUI;
 import com.lupus.gui.selectables.SelectableIcon;
 import com.lupus.region.Region;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

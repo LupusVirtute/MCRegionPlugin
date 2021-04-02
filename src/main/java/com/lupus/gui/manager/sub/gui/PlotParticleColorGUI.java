@@ -2,17 +2,18 @@ package com.lupus.gui.manager.sub.gui;
 
 import com.lupus.gui.GUI;
 import com.lupus.gui.PlotManagerGUI;
+import com.lupus.gui.utils.ItemUtility;
+import com.lupus.gui.utils.SkullUtility;
 import com.lupus.region.Region;
-import com.lupus.utils.ItemStackUtil;
-import com.lupus.utils.Skulls;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.Arrays;
 
 public class PlotParticleColorGUI extends GUI {
 	int rValue = 0;
@@ -20,35 +21,31 @@ public class PlotParticleColorGUI extends GUI {
 	int bValue = 0;
 	Region plot;
 	public static final int MAX_VALUE = 256;
+
+	// TODO REFACTOR THIS MF SHIT ALSO
 	public PlotParticleColorGUI(Region plot) {
 		super(plot.getName(), 27);
 		this.plot = plot;
 		ItemStack redWool = new ItemStack(Material.RED_WOOL);
 		ItemStack greenWool = new ItemStack(Material.GREEN_WOOL);
 		ItemStack blueWool = new ItemStack(Material.BLUE_WOOL);
-		ItemStackUtil.setItemTitleAndLore(
+		ItemUtility.setItemTitleAndLore(
 			redWool,
 			"&4Ilość Czerwieni",
-			new String[]{
-				"&9Klikając na liczby po prawej stronie możesz",
-				"&9Zarządzać jak &4czerwone&9 mają być cząsteczki"
-			}
+				Arrays.asList("&9Klikając na liczby po prawej stronie możesz",
+						"&9Zarządzać jak &4czerwone&9 mają być cząsteczki")
 		);
-		ItemStackUtil.setItemTitleAndLore(
+		ItemUtility.setItemTitleAndLore(
 			greenWool,
 			"&aIlość Zieleni",
-			new String[]{
-				"&9Klikając na liczby po prawej stronie możesz",
-				"&9Zarządzać jak &azielone&9 mają być cząsteczki"
-			}
+				Arrays.asList("&9Klikając na liczby po prawej stronie możesz",
+						"&9Zarządzać jak &azielone&9 mają być cząsteczki")
 		);
-		ItemStackUtil.setItemTitleAndLore(
+		ItemUtility.setItemTitleAndLore(
 			blueWool,
 			"&bIlość Niebieskiego",
-			new String[]{
-				"&9Klikając na liczby po prawej stronie możesz",
-				"&9Zarządzać jak &bniebieskie &9mają być cząsteczki"
-			}
+				Arrays.asList("&9Klikając na liczby po prawej stronie możesz",
+						"&9Zarządzać jak &bniebieskie &9mają być cząsteczki")
 		);
 		ItemStack deny = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 		ItemMeta meta = deny.getItemMeta();
@@ -92,7 +89,7 @@ public class PlotParticleColorGUI extends GUI {
 				return;
 			}
 		}
-		if (Skulls.isThisItemANumberSkull(clickedItem)) {
+		if (SkullUtility.isThisItemNumberSkull(clickedItem)) {
 			int value;
 			double pow = Math.pow(10, Math.abs(clickedSlot % 9 - 3));
 			if (e.getClick().isLeftClick()) {
@@ -124,7 +121,7 @@ public class PlotParticleColorGUI extends GUI {
 		else if(rValue < 0) {
 			rValue = 1;
 		}
-		Skulls.intToSkullConverter(inv,rValue,1,3);
+		SkullUtility.intToSkullConverter(inv,rValue,1,3);
 	}
 	public void addGValue(int valueAmount){
 		gValue += valueAmount;
@@ -133,7 +130,7 @@ public class PlotParticleColorGUI extends GUI {
 		else if(gValue < 0) {
 			gValue = 1;
 		}
-		Skulls.intToSkullConverter(inv,gValue,10,12);
+		SkullUtility.intToSkullConverter(inv,gValue,10,12);
 	}
 	public void addBValue(int valueAmount){
 		bValue += valueAmount;
@@ -142,10 +139,9 @@ public class PlotParticleColorGUI extends GUI {
 		else if(bValue < 0) {
 			bValue = 1;
 		}
-		Skulls.intToSkullConverter(inv,bValue,19,21);
+		SkullUtility.intToSkullConverter(inv,bValue,19,21);
 	}
 	@Override
 	public void onClose(Player player) {
-		return;
 	}
 }

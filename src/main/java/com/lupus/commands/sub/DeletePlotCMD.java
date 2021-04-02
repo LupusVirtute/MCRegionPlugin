@@ -2,30 +2,35 @@ package com.lupus.commands.sub;
 
 import com.lupus.command.framework.commands.PlayerCommand;
 import com.lupus.managers.RegionManager;
-import com.lupus.messages.PlotMessages;
+import com.lupus.messages.GeneralMessages;
+import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
-import com.lupus.utils.Usage;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 // Todo Rest of these
 public class DeletePlotCMD extends PlayerCommand {
 	public DeletePlotCMD(){
-		super("usun", Usage.usage("/dzialka usun"),"&6Usuwasz działke",0);
+		super("usun", usage("/dzialka usun"),"&6Usuwasz działke",0);
 	}
 	@Override
-	public void run(Player executor, String[] args){
+	public void run(Player executor, ArgumentList args){
 		Region reg = RegionManager.getRegionOfOwner(executor);
 		if(reg == null){
-			executor.sendMessage(PlotMessages.NO_PLOT.toString());
+			executor.sendMessage(GeneralMessages.NO_PLOT.toString());
 			return;
 		}
 		if(!reg.isDeleting()){
-			executor.sendMessage(PlotMessages.DELETE_CONFIRMATION.toString(reg.getName()));
+			MessageReplaceQuery query = new MessageReplaceQuery().
+					addString("name",reg.getName());
+			executor.sendMessage(GeneralMessages.DELETE_CONFIRMATION.toString(query));
 			reg.setDelete();
 		}
 		else{
-			executor.sendMessage(ChatColor.RED +"Usunąłeś swoją działkę "+reg.getName());
+			MessageReplaceQuery query = new MessageReplaceQuery().
+					addString("name",reg.getName());
+			executor.sendMessage(GeneralMessages.DELETE_SUCCESS_PLOT_MESSAGE.toString(query));
 			RegionManager.removeRegion(reg);
 		}
 	}

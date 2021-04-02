@@ -1,10 +1,11 @@
 package com.lupus.commands.admin;
 
 
+import com.lupus.command.framework.commands.arguments.UInteger;
 import com.lupus.managers.RegionManager;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.LupusCommand;
-import com.lupus.utils.Usage;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -13,18 +14,23 @@ public class ListCommand extends LupusCommand {
 	public ListCommand(){
 		super(
 				"list",
-				Usage.usage("/plots list","[strona]"),
+				usage("/plots list","[strona]"),
 				"&6Pokazuje liste działek",1);
 	}
 	@Override
-	public void run(CommandSender executor, String[] args) {
+	public void run(CommandSender executor, ArgumentList args) {
 		Region r;
 		if (RegionManager.getRegionAmount() <= 0) {
-			executor.sendMessage(ChatColor.RED + "0 Działek");
+			executor.sendMessage(ChatColor.RED + "0 Plots");
 			return;
 		}
+		int page = 0;
+		try{
+			page = args.getArg(UInteger.class,0).getInteger();
+		}
+		catch (Exception ignored){
 
-		int page = args.length >= 1 ? (NumberUtils.isNumber(args[0]) ? Integer.parseInt(args[0]) : 0) : 0;
+		}
 		int pageCounter = (page*5)+5;
 		executor.sendMessage(ChatColor.YELLOW + "---- "
 				+ChatColor.RED+"Plots "+ page +"/"+ RegionManager.getRegionAmount()/5

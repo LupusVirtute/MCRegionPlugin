@@ -1,8 +1,9 @@
 package com.lupus.commands.admin;
 
 import com.lupus.command.framework.commands.LupusCommand;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import com.lupus.managers.RegionManager;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -18,8 +19,8 @@ public class PlayerFindCMD extends LupusCommand {
 	}
 
 	@Override
-	public void run(CommandSender commandSender, String[] args) {
-		OfflinePlayer player = Bukkit.getOfflinePlayer(args[0]);
+	public void run(CommandSender commandSender, ArgumentList args) throws Exception {
+		OfflinePlayer player = args.getArg(OfflinePlayer.class,0);
 		UUID playerUid = player.getUniqueId();
 		Set<UUID> uuidSet = RegionManager.getPlayerMemberships(playerUid);
 		String[] uuidArray = new String[uuidSet.size()];
@@ -28,7 +29,7 @@ public class PlayerFindCMD extends LupusCommand {
 			uuidArray[i] = ChatColor.YELLOW+"-"+ ChatColor.DARK_PURPLE+RegionManager.findRegion(uuid).getName();
 			i++;
 		}
-		commandSender.sendMessage(ColorUtil.text2Color("&8---------- &6"+args[0]+" &8----------"));
+		commandSender.sendMessage(TextUtility.color("&8---------- &6"+args.get(0)+" &8----------"));
 		commandSender.sendMessage(uuidArray);
 	}
 }

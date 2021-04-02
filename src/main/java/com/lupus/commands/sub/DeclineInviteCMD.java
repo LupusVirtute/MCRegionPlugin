@@ -2,32 +2,39 @@ package com.lupus.commands.sub;
 
 
 import com.lupus.managers.InviteManager;
+import com.lupus.messages.GeneralMessages;
+import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.PlayerCommand;
-import com.lupus.utils.Usage;
-import com.lupus.messages.PlotMessages;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.bukkit.entity.Player;
 
 public class DeclineInviteCMD extends PlayerCommand {
 	public DeclineInviteCMD(){
-		super("odrzuc", Usage.usage("/dzialka odrzuc"),"Odrzuca zaproszenie o przyjęcie do działki",0);
+		super("odrzuc", usage("/dzialka odrzuc"),"Odrzuca zaproszenie o przyjęcie do działki",0);
 	}
 	@Override
-	public void run(Player executor, String[] args){
+	public void run(Player executor, ArgumentList args){
 		Region r = InviteManager.getInvite(executor);
 		if(r == null){
-			executor.sendMessage(PlotMessages.NO_INVITE.toString());
+			executor.sendMessage(GeneralMessages.NO_INVITE.toString());
 			return;
 		}
 		String ownerName = r.getOwnerName();
 		if(ownerName != null){
-			executor.sendMessage(PlotMessages.DENY_INVITE.toString(r.getOwnerName()));
+			MessageReplaceQuery query = new MessageReplaceQuery().
+					addString("player",r.getOwnerName());
+			executor.sendMessage(GeneralMessages.DENY_INVITE.toString(query));
 			Player p2 = r.getOwner();
 			if(p2 != null) {
-				p2.sendMessage(PlotMessages.OWNER_DENY_INVITE_MESSAGE.toString(executor.getName()));
+				query = new MessageReplaceQuery().addString("player",executor.getName());
+				p2.sendMessage(GeneralMessages.OWNER_DENY_INVITE_MESSAGE.toString(query));
 			}
+			InviteManager.removeInvite(executor);
 		}else {
-			executor.sendMessage(PlotMessages.DENY_INVITE.toString("Wlasciciel nie istnieje"));
+			MessageReplaceQuery query = new MessageReplaceQuery().
+					addString("player","Wlasciciel nie istnieje");
+			executor.sendMessage(GeneralMessages.DENY_INVITE.toString());
 		}
 	}
 }

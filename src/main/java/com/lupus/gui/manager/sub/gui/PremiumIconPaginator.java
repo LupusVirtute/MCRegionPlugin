@@ -5,7 +5,7 @@ import com.lupus.gui.Paginator;
 import com.lupus.gui.PlotManagerGUI;
 import com.lupus.gui.SelectableItem;
 import com.lupus.region.Region;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +47,7 @@ public class PremiumIconPaginator extends Paginator {
 			return;
 		ItemStack iconNew = new ItemStack(e.getCurrentItem());
 		r.setIcon(iconNew);
-		player.sendMessage(ColorUtil.text2Color("&a&lPoprawnie ustawiono nową ikone"));
+		player.sendMessage(TextUtility.color("&a&lPoprawnie ustawiono nową ikone"));
 		new PlotManagerGUI().open(player);
 	}
 

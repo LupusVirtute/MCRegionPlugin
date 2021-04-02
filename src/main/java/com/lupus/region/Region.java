@@ -350,7 +350,7 @@ public class Region implements ConfigurationSerializable {
 		serializedMap.put("maxZ",maxZ);
 		if (icon == null)
 			icon = new ItemStack(Material.ENDER_EYE);
-		if (icon instanceof SelectableItem)
+		else
 			icon = new ItemStack(icon);
 		serializedMap.put("icon",icon);
 		serializedMap.put("color",plotColor.getChar());

@@ -5,8 +5,8 @@ import com.lupus.gui.StatsGUI;
 import com.lupus.managers.PlayerInsideRegionManager;
 import com.lupus.managers.RegionManager;
 import com.lupus.region.Region;
-import com.lupus.utils.ColorUtil;
-import com.lupus.utils.Usage;
+import com.lupus.gui.utils.TextUtility;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,16 +17,16 @@ import java.util.List;
 
 public class StatsCMD extends PlayerCommand {
 	public StatsCMD(){
-		super("stats", Usage.usage("/dzialka stats", "[nazwa dzialki]"),"&6Pokazuje statystyki działki",1);
+		super("stats", usage("/dzialka stats", "[nazwa dzialki]"),"&6Pokazuje statystyki działki",1);
 	}
 	@Override
-	public void run(Player extractor, String[] args){
+	public void run(Player extractor, ArgumentList args) throws Exception {
 		Region region;
-		if(args.length < 1){
+		if(args.size() < 1){
 			region = PlayerInsideRegionManager.getPlayerRegionHeIsInsideOf(extractor);
 		}
 		else{
-			region = RegionManager.findRegion(args[0]);
+			region = args.getArg(Region.class,0);
 		}
 
 		if(region == null){

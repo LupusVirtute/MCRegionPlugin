@@ -2,7 +2,7 @@ package com.lupus.listeners;
 
 import com.lupus.managers.ChatManager;
 import com.lupus.region.Region;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,6 +21,7 @@ public class ChatListener implements Listener {
 		Region r = ChatManager.getPlayerRegion(p);
 		if (r == null)
 			return;
+		e.setCancelled(true);
 		StringBuilder builder = new StringBuilder();
 		builder.append("[");
 		builder.append(r.getName());
@@ -28,7 +29,7 @@ public class ChatListener implements Listener {
 		builder.append(p.getName());
 		builder.append(" &8&l>> &r");
 		builder.append(e.getMessage());
-		String message = ColorUtil.text2Color(builder.toString());
+		String message = TextUtility.color(builder.toString());
 		Bukkit.broadcast(ChatColor.GRAY+"[AV] "+ ChatColor.RESET+message,seeChatPerm);
 		Bukkit.getLogger().info(message);
 		for (UUID member : r.getMembers()) {

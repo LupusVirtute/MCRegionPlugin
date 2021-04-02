@@ -1,24 +1,25 @@
 package com.lupus.commands;
 
 
+import com.lupus.MCGUIFramework;
 import com.lupus.command.framework.commands.LupusCommand;
 import com.lupus.command.framework.commands.SupCommand;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import com.lupus.commands.sub.*;
-import com.lupus.gui.PlotGUI;
-import com.lupus.utils.Usage;
-import org.bukkit.ChatColor;
+import com.lupus.gui.IGUI;
+import com.lupus.messages.GeneralMessages;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class PlotMainSupCommand extends SupCommand {
 	public PlotMainSupCommand(){
 		super(
 			"dzialka",
-			Usage.usage("/dzialka"),
+			usage("/dzialka"),
 			"&6Komenda do zarządzania działkami",
 				Arrays.asList("dz"),
 				new ArrayList<>(),
@@ -28,6 +29,7 @@ public class PlotMainSupCommand extends SupCommand {
 				new AddToPlotCMD(),
 				new CreatePlotCMD(),
 				new ChangeNameCMD(),
+				new ChatCMD(),
 				new DefaultCMD(),
 				new DeletePlotCMD(),
 				new DeclineInviteCMD(),
@@ -44,16 +46,18 @@ public class PlotMainSupCommand extends SupCommand {
 	}
 
 	@Override
-	public boolean optionalOperations(CommandSender sender, String[] args) {
+	public boolean optionalOperations(CommandSender sender, ArgumentList args) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED+ "Komenda tylko dla graczy");
+			sender.sendMessage(GeneralMessages.PLAYER_ONLY.toString());
 			return true;
 		}
 		Player p = (Player)sender;
-		if (args.length < 1)
+		if (args.size() < 1)
 		{
-			PlotGUI plotGUI = new PlotGUI(p);
-			plotGUI.open(p);
+			IGUI gui = MCGUIFramework.getManager().getGUI("PlotGUI");
+			if (gui == null)
+				return true;
+			gui.open(p);
 			return true;
 		}
 		return false;

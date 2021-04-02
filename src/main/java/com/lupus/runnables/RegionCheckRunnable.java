@@ -14,13 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegionCheckRunnable extends BukkitRunnable {
+	String worldName = WorldUtils.getMainWorld().getName();
 	@Override
 	public void run() {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			if(p == null){
 				continue;
 			}
-			if(!p.getWorld().getName().equals(WorldUtils.getMainWorld().getName()))
+			if(!p.getWorld().getName().equals(worldName))
 				continue;
 			boolean contains = false;
 			Location loc = p.getLocation();

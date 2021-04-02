@@ -1,28 +1,25 @@
 package com.lupus;
 
-import com.lupus.command.framework.commands.ILupusCommand;
-import com.lupus.commands.PlotMainSupCommand;
-import com.lupus.commands.PlotsMainCMD;
-import com.lupus.gui.SelectableItem;
+import com.lupus.command.framework.commands.arguments.ArgumentType;
 import com.lupus.gui.manager.sub.gui.PremiumIconPaginator;
+import com.lupus.gui.utils.SkullUtility;
+import com.lupus.listeners.ChatListener;
 import com.lupus.listeners.RegionListener;
+import com.lupus.managers.CacheManager;
 import com.lupus.managers.RegionManager;
+import com.lupus.messages.GeneralMessages;
 import com.lupus.region.Region;
-import com.lupus.runnables.BackupRunnable;
 import com.lupus.runnables.RegionCheckRunnable;
-import com.lupus.utils.Skulls;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.annotation.dependency.Dependency;
+import org.bukkit.plugin.java.annotation.dependency.DependsOn;
 import org.bukkit.plugin.java.annotation.permission.Permission;
 import org.bukkit.plugin.java.annotation.plugin.ApiVersion;
 import org.bukkit.plugin.java.annotation.plugin.Description;
@@ -40,12 +37,13 @@ import java.util.List;
 @Description(value = "Simple plot creator")
 @Author(value = "LupusVirtute")
 @Website(value="github.com/PuccyDestroyerxXx")
-
-@Dependency(value = "WorldGuard")
-@Dependency(value = "WorldEdit")
-@Dependency(value = "Vault")
-@Dependency(value = "LupusUtils")
-@Dependency(value = "LupusCommandFramework")
+@DependsOn({
+	@Dependency(value = "WorldGuard"),
+	@Dependency(value = "WorldEdit"),
+	@Dependency(value = "Vault"),
+	@Dependency(value = "LupusUtils"),
+	@Dependency(value = "LupusCommandFramework")
+})
 @ApiVersion(value = ApiVersion.Target.v1_15)
 
 @Permission(name = "plot.vip")
@@ -82,7 +80,11 @@ public class RegionPlugin extends JavaPlugin {
 		}
 		dataFolder = this.getDataFolder();
 		plugin = this;
+		this.saveDefaultConfig();
+		this.saveResource("messages.yml", false);
+		GeneralMessages.reloadMessages();
 		initSerializable();
+		getServer().getPluginManager().registerEvents(new ChatListener(),this);
 		getServer().getPluginManager().registerEvents(new RegionListener(),this);
 		RegionManager.reloadRegions();
 		regionCheckRunnable = new RegionCheckRunnable().runTaskTimerAsynchronously(this,0,10);
@@ -92,6 +94,7 @@ public class RegionPlugin extends JavaPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		CacheManager.getInstance().load();
 	}
 	@Override
 	public void onDisable(){
@@ -108,9 +111,15 @@ public class RegionPlugin extends JavaPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		CacheManager.getInstance().save();
+		registerTypes();
+	}
+	private void registerTypes(){
+		ArgumentType.addArgumentTypeInterpreter(new ArgumentType(Region.class,(arg)->RegionManager.findRegion(arg[0])));
 	}
 	private void initSerializable(){
 		ConfigurationSerialization.registerClass(Region.class);
+		ConfigurationSerialization.registerClass(CacheManager.class);
 	}
 	private void loadPremiumIcons() throws IOException {
 		File file = new File(this.getDataFolder(),"PremiumIcons.yml");
@@ -126,7 +135,7 @@ public class RegionPlugin extends JavaPlugin {
 		List<ItemStack> premiumIcons = new ArrayList<>();
 		for (String b64PremiumIcon : b64PremiumIcons) {
 			premiumIcons.add(
-				Skulls.setSkullTexture(new ItemStack(Material.PLAYER_HEAD),b64PremiumIcon)
+				SkullUtility.getFromTextureB64(b64PremiumIcon)
 			);
 		}
 		PremiumIconPaginator.addPremiumIcons(premiumIcons);
@@ -137,7 +146,12 @@ public class RegionPlugin extends JavaPlugin {
 			return;
 		List<String> b64Textures = new ArrayList<>();
 		for (ItemStack item : items) {
-			String b64 = Skulls.getB64SkullTexture(item);
+			SkullMeta meta = (SkullMeta)item.getItemMeta();
+
+			if (meta == null)
+				continue;
+
+			String b64 = SkullUtility.getSkullStringFromProfile(meta.getPlayerProfile());
 			b64Textures.add(b64);
 		}
 		File file = new File(this.getDataFolder(),"PremiumIcons.yml");
@@ -161,19 +175,5 @@ public class RegionPlugin extends JavaPlugin {
 		econ = rsp.getProvider();
 		return econ != null;
 	}
-/*	static ILupusCommand[] commands = {
-			new PlotMainSupCommand(),
-			new PlotsMainCMD()
-	};
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		String cmd = command.getName().toLowerCase();
-		for (ILupusCommand lupCommand : commands){
-			if (lupCommand.isMatch(cmd)) {
-				lupCommand.execute(sender,args);
-				break;
-			}
-		}
-		return super.onCommand(sender, command, label, args);
-	}*/
+
 }

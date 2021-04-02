@@ -1,7 +1,8 @@
 package com.lupus.managers;
 
+import com.lupus.messages.GeneralMessages;
+import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
-import com.lupus.messages.PlotMessages;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -20,7 +21,8 @@ public class InviteManager {
 		invites.put(player,region);
 		Player p = Bukkit.getPlayer(player);
 		if (p != null){
-			p.sendMessage(PlotMessages.INVITE_SEND.toString(region.getOwnerName()));
+			MessageReplaceQuery query = new MessageReplaceQuery().addString("player",region.getOwnerName());
+			p.sendMessage(GeneralMessages.INVITE_SEND.toString(query));
 		}
 	}
 	public static void removeInvite(Player player){

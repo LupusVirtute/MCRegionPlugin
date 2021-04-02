@@ -3,7 +3,7 @@ package com.lupus.commands.admin;
 import com.lupus.managers.RegionManager;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.PlayerCommand;
-import com.lupus.utils.Usage;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,12 +13,12 @@ import java.util.List;
 
 public class GoToCommand extends PlayerCommand {
 	public GoToCommand(){
-		super("goto", Usage.usage("/plots goto","[Dzialka]"),"&6Idziesz do działki",1);
+		super("goto", usage("/plots goto","[Dzialka]"),"&6Idziesz do działki",1);
 	}
 
 	@Override
-	protected void run(Player player, String[] strings) {
-		Region r = RegionManager.findRegion(strings[0]);
+	protected void run(Player player,ArgumentList args) throws Exception {
+		Region r = args.getArg(Region.class,0);
 		Location spawn = r.getSpawn();
 		player.teleport(spawn);
 	}

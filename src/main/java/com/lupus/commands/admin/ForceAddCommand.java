@@ -1,10 +1,12 @@
 package com.lupus.commands.admin;
 
+import com.lupus.managers.CacheManager;
 import com.lupus.managers.RegionManager;
+import com.lupus.messages.GeneralMessages;
+import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
 import com.lupus.command.framework.commands.LupusCommand;
-import com.lupus.messages.PlotMessages;
-import com.lupus.utils.Usage;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,24 +17,27 @@ import java.util.List;
 public class ForceAddCommand extends LupusCommand {
 	public ForceAddCommand(){
 		super("forceadd",
-				Usage.usage("/plots forceadd","[Gracz] [Dzialka]"),
+				usage("/plots forceadd","[Gracz] [Dzialka]"),
 				"&6Dodajesz do działki gracza",
 				2);
 	}
 	@Override
-	public void run(CommandSender executor, String[] args) {
-		Player p = Bukkit.getPlayerExact(args[0]);
+	public void run(CommandSender executor, ArgumentList args) throws Exception{
+		Player p = args.getArg(Player.class,0);
 		if(p == null) {
-			executor.sendMessage(PlotMessages.PLAYER_OFFLINE.toString());
+			executor.sendMessage(GeneralMessages.PLAYER_OFFLINE.toString());
 			return;
 		}
-		Region r = RegionManager.findRegion(args[1]);
+		Region r = args.getArg(Region.class,1);
 		if(r == null){
-			executor.sendMessage(PlotMessages.NULL_PLOT.toString());
+			executor.sendMessage(GeneralMessages.NULL_PLOT.toString());
 			return;
 		}
 		RegionManager.addPlayerToRegion(p,r);
-		executor.sendMessage("Poprawnie dodano gracza "+p.getName()+" do działki "+r.getName());
+		MessageReplaceQuery query = new MessageReplaceQuery().
+				addString("player",p.getName()).
+				addString("name",r.getName());
+		executor.sendMessage(GeneralMessages.SUCCESFULL_FORCE_ADD.toString(query));
 	}
 	@NotNull
 	@Override

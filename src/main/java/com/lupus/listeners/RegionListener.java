@@ -1,7 +1,8 @@
 package com.lupus.listeners;
 
+import com.lupus.managers.CacheManager;
 import com.lupus.managers.RegionManager;
-import com.lupus.messages.PlotMessages;
+import com.lupus.messages.GeneralMessages;
 import com.lupus.region.Region;
 import com.lupus.utils.WorldUtils;
 import org.bukkit.Location;
@@ -11,18 +12,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerLeashEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryInteractEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.projectiles.ProjectileSource;
 import org.spigotmc.event.entity.EntityMountEvent;
 
 public class RegionListener implements Listener {
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e){
+		CacheManager.getInstance().setPLayer(e.getPlayer().getName(),e.getPlayer().getUniqueId());
+	}
 	@EventHandler
 	public void onPlayerInteraction(PlayerInteractEvent e){
 		if (e.hasBlock()) {
@@ -34,7 +36,7 @@ public class RegionListener implements Listener {
 				return;
 			boolean isBrokenIllegally = isIllegalAction(p, e.getClickedBlock().getLocation());
 			if (isBrokenIllegally) {
-				p.sendMessage(PlotMessages.INVALID_INTERACT.toString());
+				p.sendMessage(GeneralMessages.INVALID_INTERACT.toString());
 				e.setCancelled(true);
 			}
 		}
@@ -46,7 +48,7 @@ public class RegionListener implements Listener {
 		Location entityLocation = entity.getLocation();
 		boolean isIllegal = isIllegalAction(p,entityLocation);
 		if (isIllegal){
-			p.sendMessage(PlotMessages.INVALID_INTERACT.toString());
+			p.sendMessage(GeneralMessages.INVALID_INTERACT.toString());
 			e.setCancelled(true);
 		}
 	}
@@ -87,7 +89,7 @@ public class RegionListener implements Listener {
 				case HOT_FLOOR:
 				case PROJECTILE:
 					e.setCancelled(true);
-					p.sendMessage(PlotMessages.INVALID_DAMAGE.toString());
+					p.sendMessage(GeneralMessages.INVALID_DAMAGE.toString());
 					break;
 				default:
 					break;
@@ -102,7 +104,7 @@ public class RegionListener implements Listener {
 		boolean illegal = isIllegalAction(p,proj.getLocation());
 		if (illegal){
 			proj.remove();
-			p.sendMessage(PlotMessages.INVALID_DAMAGE.toString());
+			p.sendMessage(GeneralMessages.INVALID_DAMAGE.toString());
 		}
 	}
 	@EventHandler
@@ -152,7 +154,7 @@ public class RegionListener implements Listener {
 		boolean illegal = isIllegalAction(player,e.getEntity().getLocation());
 		if (illegal) {
 			e.setCancelled(true);
-			player.sendMessage(PlotMessages.INVALID_DAMAGE.toString());
+			player.sendMessage(GeneralMessages.INVALID_DAMAGE.toString());
 		}
 	}
 	public boolean isIllegalAction(Player p, Location location) {

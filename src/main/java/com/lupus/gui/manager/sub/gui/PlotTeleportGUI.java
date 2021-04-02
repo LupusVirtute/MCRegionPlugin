@@ -67,7 +67,7 @@ public class PlotTeleportGUI extends GUI {
 			itemStack.setItemMeta(itemMeta);
 			SelectableItemCommand commandItem = new SelectableItemCommand(itemStack,"dzialka teleport "+r.getName(),player);
 			items.add(commandItem);
-			inv.addItem(commandItem);
+			inv.addItem(commandItem.getItem());
 		}
 
 		player.openInventory(getInventory());

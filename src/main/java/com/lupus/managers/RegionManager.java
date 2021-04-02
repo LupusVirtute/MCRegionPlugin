@@ -17,7 +17,7 @@
 package com.lupus.managers;
 
 import com.lupus.RegionPlugin;
-import com.lupus.utils.ColorUtil;
+import com.lupus.gui.utils.TextUtility;
 import com.lupus.region.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +28,6 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +66,12 @@ public class RegionManager {
 		return true;
 	}
 
+	/**
+	 * removes player from certain region
+	 * @param player UUID of player to remove
+	 * @param region Region to remove player from
+	 * @return whether it succeeded
+	 */
 	public static boolean removePlayerFromRegion(UUID player,Region region){
 		if(!playersInRegion.containsKey(player)){
 			return false;
@@ -230,7 +235,7 @@ public class RegionManager {
 		List<String> results = new ArrayList<>();
 		String name;
 		for (Region reg : RegionManager.getRegions()) {
-			name = ColorUtil.strip(reg.getName());
+			name = TextUtility.strip(reg.getName());
 			if (name.startsWith(search)) {
 				results.add(name);
 			}
@@ -241,7 +246,7 @@ public class RegionManager {
 		List<String> results = new ArrayList<>();
 		String name;
 		for (Region reg : RegionManager.getRegions()) {
-			name = ColorUtil.strip(reg.getName());
+			name = TextUtility.strip(reg.getName());
 			if (name.contains(search)) {
 				results.add(name);
 			}
@@ -273,10 +278,10 @@ public class RegionManager {
 		if(region == null){
 			return null;
 		}
-		region = ColorUtil.strip(region);
+		region = TextUtility.strip(region);
 		region = region.toLowerCase();
 		for(Region reg : RegionManager.getRegions()){
-			if(ColorUtil.strip(reg.getName().toLowerCase()).equals(region)){
+			if(TextUtility.strip(reg.getName().toLowerCase()).equals(region)){
 				return reg;
 			}
 		}

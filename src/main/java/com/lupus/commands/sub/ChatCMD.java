@@ -1,8 +1,11 @@
 package com.lupus.commands.sub;
 
 import com.lupus.command.framework.commands.PlayerCommand;
+import com.lupus.command.framework.commands.arguments.ArgumentList;
 import com.lupus.managers.ChatManager;
 import com.lupus.managers.RegionManager;
+import com.lupus.messages.GeneralMessages;
+import com.lupus.messages.MessageReplaceQuery;
 import com.lupus.region.Region;
 import org.bukkit.entity.Player;
 
@@ -12,26 +15,25 @@ public class ChatCMD extends PlayerCommand {
 	}
 
 	@Override
-	protected void run(Player player, String[] strings) {
-		if (strings.length < 1){
+	protected void run(Player player, ArgumentList args) throws Exception {
+		if (args.size() < 1){
 			ChatManager.removePlayerChat(player);
-			player.sendMessage(colorText("&aPoprawnie wyłączyłeś czat działki"));
+			player.sendMessage(GeneralMessages.SUCCESSFUL_CHAT_TURN_OFF.toString());
 			return;
 		}
-		Region r = RegionManager.findRegion(strings[0]);
+		Region r = args.getArg(Region.class,0);
 		if (r == null)
 		{
-			String message = colorText("&4"+strings[0]+" &cNie jest to nazwa działki");
-			player.sendMessage(message);
+			MessageReplaceQuery query = new MessageReplaceQuery().addString("name",args.get(0));
+			player.sendMessage(GeneralMessages.THIS_IS_NOT_PLOT_NAME.toString(query));
 			return;
 		}
-		if (r.containsMember(player)){
-			String message = colorText("&cNie jesteś dodany do działki");
-			player.sendMessage(message);
+		if (!r.containsMember(player)){
+			player.sendMessage(GeneralMessages.NOT_ADDED_TO_PLOT.toString());
 			return;
 		}
 		ChatManager.changePlayerRegionChat(r,player);
-		String message = colorText("&aTeraz gadasz na czacie działki : "+r.getName());
-		player.sendMessage(message);
+		MessageReplaceQuery query = new MessageReplaceQuery().addString("name",r.getName());
+		player.sendMessage(GeneralMessages.YOURE_NOW_TALKING_ON_CHAT_PLOT.toString(query));
 	}
 }
